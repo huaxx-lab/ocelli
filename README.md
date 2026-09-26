@@ -1,17 +1,26 @@
-# ocelli
+<img src="docs/banner.png" alt="ocelli — a procedural Personal Assistant avatar" width="100%">
 
-> *ocelli* (plural of **ocellus**, Latin for "little eye") — the simple eyes of
-> insects and other arthropods. Two small eyes on a body with no other facial
-> features is exactly this avatar's design, so the name is a description rather
-> than a codename.
+[![MIT](https://img.shields.io/badge/licence-MIT-3a7bd5?style=flat-square)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?style=flat-square&logo=typescript&logoColor=white)](#architecture)
+[![Canvas 2D](https://img.shields.io/badge/renderer-Canvas%202D-e8993a?style=flat-square)](#why-canvas-2d)
+[![checks](https://img.shields.io/badge/browser%20checks-66%20%2B%2025-3fb950?style=flat-square)](#verification)
+[![target](https://img.shields.io/badge/target-M5Stack%20StopWatch%20466%C3%97466-8957e5?style=flat-square)](docs/MIGRATION.md)
+
+**ocelli** *(plural of* ocellus*, Latin for "little eye")* — the simple eyes of
+insects and other arthropods. Two small eyes on a body with no other facial
+features is exactly this avatar's design, so the name describes the thing rather
+than decorating it.
 
 A **Personal Assistant Avatar Engine** plus the **Web Avatar Lab** it is tuned
-in — a procedural 2D character built to run in the browser today and on an
-M5Stack StopWatch (466 × 466 round AMOLED) tomorrow.
+in: a procedural 2D character that runs in the browser today and is built to run
+on an M5Stack StopWatch (466 × 466 round AMOLED) tomorrow.
 
-Built for the Personal Assistant / Harness project: an interactive lab page plus
-a **renderer-agnostic animation engine** designed from day one to be ported to
-the StopWatch. No GIFs, no video, no sprite sheets — every frame is computed.
+**No GIFs, no video, no sprite sheets. Every frame is computed.**
+
+<img src="docs/demo.gif" alt="An assistant turn: idle → listening → thinking → working → speaking → approval → success, with a wink" width="300">
+
+*A full assistant turn — idle → listening → thinking → working → speaking →
+approval → success, with a wink on the way out.*
 
 ---
 
@@ -128,6 +137,20 @@ Four rules, enforced in the renderer, are what keep it from becoming a cartoon:
    ERROR (both inner ends pinched up — distress) draw them. A permanent brow
    changes the character's whole face.
 
+### Why Canvas 2D
+
+Not **SVG**: the body deforms from a polar-radius function every frame, which in
+SVG means rewriting a `d` attribute (string parse + layout) sixty times a second,
+and every layer needs a per-frame gradient.
+
+Not **WebGL / Three.js**: this is a 2D character with two shapes and a gradient.
+A 3D engine would add a dependency, a shader build step, and a much harder
+StopWatch port for zero visual gain. The sphere is an *illusion* produced by a
+2D projection — it does not need a GPU.
+
+Canvas 2D is also the closest thing to what the device has. The StopWatch
+renderer is M5GFX drawing into a sprite; the primitives map almost one-to-one.
+
 ### The sphere warp — a face painted on a ball
 
 The eyes are not drawn on a flat disc. They are projected onto a virtual ball,
@@ -185,6 +208,12 @@ centre, the more its width foreshortens, so they read as marks on a curved
 surface rather than stickers on a flat disc.
 
 ## The ten states
+
+<img src="docs/states-contact-sheet.png" alt="All ten states: idle, listening, thinking, working, speaking, waiting input, waiting approval, success, error, sleeping" width="100%">
+
+Each state is a still photograph from the same renderer. Read the eyes: the
+capsules change aspect, the arc flips from `^ ^` to `v v`, and the brows appear
+only where the eyes alone cannot carry the meaning.
 
 | State | Feel | Signature |
 |---|---|---|
@@ -393,7 +422,10 @@ drive the actual page and measure pixels.
 ```bash
 node tools/verify.mjs         http://127.0.0.1:5199/avatar-lab.html verification
 node tools/verify-harness.mjs http://127.0.0.1:3099/                verification-harness
-node tools/contact-sheet.mjs   # the ten-state grid above
+node tools/contact-sheet.mjs   # the ten-state grid
+node tools/banner.mjs          # the header image
+node tools/demo-gif.mjs        # docs/demo.gif
+node tools/direction.mjs       # drag axes, measured on the canvas
 ```
 
 The harness probes for a Chromium binary rather than assuming one; override with
@@ -405,10 +437,24 @@ The harness probes for a Chromium binary rather than assuming one; override with
 | Inside the DSH GUI | **25 / 25** | plugin mounts · launcher live and animating · **existing Harness UI untouched** · overlay stays click-through · 466 × 466 frame inside the GUI · all 10 states · scenario reaches APPROVAL and SUCCESS · closes cleanly |
 
 Screenshots are written next to each `report.json`. The grids in `docs/` are
-produced by `node tools/contact-sheet.mjs` (states), plus the gesture and
-sphere-warp sheets:
+produced by `node tools/contact-sheet.mjs`, `tools/demo-gif.mjs` and
+`tools/banner.mjs` — every image in this README is generated from the real
+renderer, so none of them can drift from the product.
 
-![all ten states](docs/states-contact-sheet.png)
+---
+
+## More views
+
+<table>
+<tr>
+<td width="50%"><img src="docs/sphere-warp-contact-sheet.png" alt="The head turning: near eye swells, far eye shrinks" width="100%"><br>
+<sub><b>Sphere warp.</b> A head turn moves the eyes on a curve, swells the near
+one and shrinks the far one. Front-facing is an exact no-op.</sub></td>
+<td width="50%"><img src="docs/gestures-contact-sheet.png" alt="Ten gestures: wink, nod, shake, laugh, peek, dizzy, sneeze, heart, sing, zzz" width="100%"><br>
+<sub><b>Ten gestures.</b> Layered additively over any state, so a nod composes
+with whatever the avatar is being rather than replacing it.</sub></td>
+</tr>
+</table>
 
 ---
 
