@@ -1,0 +1,25 @@
+/* DeviceFrame — the round panel.
+   Nothing decorative: the reference hardware is a plain black circle. No bezel
+   ring, no glow, no vignette, no sheen — each of those reads as a drawn UI
+   element rather than as the device. */
+
+.shell {
+  position: relative;
+  flex: none;
+  width: var(--device-nominal, 466px);
+  /* Scale down on narrow viewports instead of overflowing. The 40px accounts
+     for the page's own padding. */
+  max-width: min(100%, calc(100vw - 40px));
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  isolation: isolate;
+}
+
+/* The active area — a true circle, clipped. */
+.screen {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #000;
+}

@@ -19,3 +19,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+## Third-party references
+
+This project was built by studying three open-source projects. Their
+architectures and mathematics informed the design; no code was copied from any
+of them. See `docs/ANALYSIS.md` for what was taken from each and
+`docs/MIGRATION.md` §7 for the licence boundary.
+
+| Project | Licence | What it contributed |
+|---|---|---|
+| `Trentct/m5stack-stopwatch-avatar` (KK) | AGPL-3.0 | Easing vocabulary, crossfade transitions, dirty-rectangle discipline for a small MCU. **Ideas only — no code copied.** |
+| `ngocdevv/grok-bot-emoji` | MIT | The *principle* of a continuously morphing expression surface. No paths, colours or proportions used. |
+| `MarcoFre/AURA---ESP32-S3-...` | MIT | State priority ladder, blink cadence, idle gesture table, audio envelope maths. |
+
+The SphereWarp and DelayedFollow Rive effects by AB at Novra were supplied as a
+reference by the project author, who states they are free to use. The sphere
+projection in `src/avatar/core/sphere.ts` and the delayed-follow head spring in
+`src/avatar/behaviors/body.ts` are ports of that maths.
+
+### Note on AGPL
+
+KK is AGPL-3.0. No KK source code appears in this repository, and the concepts
+taken from it (easing functions, crossfade design, amplitude/period tuning) are
+not copyrightable expression in any jurisdiction this project is distributed
+into. If KK source is ever copied into the future StopWatch firmware, that
+firmware becomes an AGPL-3.0 derivative and must be published under those terms.
+
+All artwork in this repository — the grey sphere, the capsule eyes, the palette,
+the gesture designs — is original to this project.

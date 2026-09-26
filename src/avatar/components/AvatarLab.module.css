@@ -1,0 +1,569 @@
+/* AvatarLab — the laboratory page.
+   The visual language is "quiet instrument panel": near-black ground, low-
+   contrast chrome, one accent colour. Nothing here competes with the avatar. */
+
+.root {
+  --lab-bg: #08090c;
+  --lab-panel: #0e1014;
+  --lab-panel-2: #13161b;
+  --lab-line: #1e222a;
+  --lab-line-soft: #171a20;
+  --lab-text: #e6e9ef;
+  --lab-text-dim: #8b93a3;
+  --lab-text-faint: #5b6273;
+  --lab-accent: #6ea8fe;
+  --lab-accent-soft: rgba(110, 168, 254, 0.14);
+
+  min-height: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  padding: 28px clamp(16px, 3vw, 40px) 56px;
+  background:
+    radial-gradient(1200px 620px at 22% -8%, rgba(80, 120, 200, 0.09), rgba(0, 0, 0, 0) 62%),
+    var(--lab-bg);
+  color: var(--lab-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 1240px;
+  margin: 0 auto 26px;
+}
+
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 620;
+  letter-spacing: 0.2px;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--lab-text-dim);
+  max-width: 62ch;
+}
+
+.headerMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+
+.badge,
+.fps {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--lab-line);
+  background: var(--lab-panel);
+  color: var(--lab-text-dim);
+  white-space: nowrap;
+}
+
+.fps {
+  color: var(--lab-accent);
+  border-color: rgba(110, 168, 254, 0.28);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────── */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 466px) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 56px);
+  max-width: 1240px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+}
+
+/* ── Stage ──────────────────────────────────────────────────────────── */
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  padding-top: 18px;
+}
+
+.stageCaption {
+  text-align: center;
+  max-width: 420px;
+}
+
+.stateName {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  color: var(--lab-accent);
+}
+
+.stateNote {
+  margin-top: 8px;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+.contextLabel {
+  margin-top: 8px;
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: var(--lab-accent-soft);
+  border: 1px solid rgba(110, 168, 254, 0.25);
+  color: #b9d3ff;
+}
+
+.stageHint {
+  margin-top: 12px;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--lab-text-faint);
+}
+
+/* ── Controls ───────────────────────────────────────────────────────── */
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.panel {
+  border: 1px solid var(--lab-line);
+  background: var(--lab-panel);
+  border-radius: 14px;
+  padding: 15px 16px 17px;
+}
+
+.panelTitle {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--lab-text-faint);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* State buttons */
+
+.stateGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(112px, 100%), 1fr));
+  gap: 7px;
+}
+
+.stateButton {
+  appearance: none;
+  border: 1px solid var(--lab-line);
+  background: var(--lab-panel-2);
+  color: var(--lab-text-dim);
+  border-radius: 9px;
+  padding: 9px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    color 0.16s ease,
+    border-color 0.16s ease;
+  text-align: center;
+}
+
+.stateButton:hover {
+  background: #191d24;
+  color: var(--lab-text);
+  border-color: #2a303a;
+}
+
+.stateButtonActive {
+  background: var(--lab-accent-soft);
+  border-color: rgba(110, 168, 254, 0.45);
+  color: #cfe2ff;
+}
+
+/* Sliders */
+
+.sliderRow {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr) 46px;
+  align-items: center;
+  gap: 11px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.sliderLabel {
+  font-size: 12px;
+  color: var(--lab-text-dim);
+}
+
+.sliderValue {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: var(--lab-text-faint);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.slider {
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  border-radius: 999px;
+  background: #232833;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #cfd8e6;
+  border: 0;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: var(--lab-accent);
+}
+
+.slider::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #cfd8e6;
+  border: 0;
+  cursor: pointer;
+}
+
+/* Scenarios */
+
+.scenarioRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.scenarioButton,
+.ghostButton {
+  appearance: none;
+  border: 1px solid var(--lab-line);
+  background: var(--lab-panel-2);
+  color: var(--lab-text-dim);
+  border-radius: 9px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    color 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.scenarioButton:hover,
+.ghostButton:hover {
+  background: #191d24;
+  color: var(--lab-text);
+}
+
+.scenarioPrimary {
+  border-color: rgba(110, 168, 254, 0.42);
+  color: #cfe2ff;
+  background: var(--lab-accent-soft);
+}
+
+.scenarioPrimary:hover {
+  background: rgba(110, 168, 254, 0.2);
+  color: #e2eeff;
+}
+
+.scenarioActive {
+  border-color: rgba(255, 140, 120, 0.5);
+  background: rgba(255, 120, 100, 0.12);
+  color: #ffc4b8;
+}
+
+.ghostButton {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.scenarioHint {
+  margin-top: 11px;
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--lab-text-faint);
+}
+
+/* Progress + caption */
+
+.progressWrap {
+  margin-top: 13px;
+}
+
+.progressBar {
+  height: 3px;
+  border-radius: 999px;
+  background: #232833;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #4b7fd4, #8fc4ff);
+  border-radius: 999px;
+  transition: width 0.1s linear;
+}
+
+.beatCaption {
+  margin-top: 11px;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--lab-text-dim);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.speakerUser,
+.speakerAssistant {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  flex: none;
+}
+
+.speakerUser {
+  background: rgba(140, 200, 255, 0.14);
+  color: #a8cdf5;
+}
+
+.speakerAssistant {
+  background: rgba(150, 230, 200, 0.13);
+  color: #9fdec4;
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 11px;
+  font-size: 12px;
+  color: var(--lab-text-dim);
+  cursor: pointer;
+}
+
+.toggleRow input {
+  accent-color: var(--lab-accent);
+}
+
+/* ── Debug ──────────────────────────────────────────────────────────── */
+
+.debug {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 26px;
+  max-width: 1240px;
+  margin: 34px auto 0;
+  padding-top: 26px;
+  border-top: 1px solid var(--lab-line-soft);
+}
+
+@media (max-width: 860px) {
+  .debug {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.debugColumn {
+  min-width: 0;
+}
+
+.debugGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr));
+  gap: 16px;
+}
+
+.debugGroup {
+  min-width: 0;
+}
+
+.debugGroupName {
+  font-size: 10.5px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--lab-accent);
+  opacity: 0.75;
+  margin-bottom: 7px;
+}
+
+.debugRow {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) 52px;
+  align-items: center;
+  gap: 8px;
+  padding: 2.5px 0;
+}
+
+.debugKey {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  color: var(--lab-text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.debugBar {
+  height: 3px;
+  border-radius: 999px;
+  background: #1b1f27;
+  overflow: hidden;
+}
+
+.debugBarFill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #3f6fb8, #8fc4ff);
+  border-radius: 999px;
+}
+
+.debugValue {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  color: var(--lab-text-dim);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.behaviourRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.behaviourTag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--lab-line);
+  background: var(--lab-panel);
+  color: var(--lab-text-faint);
+}
+
+/* State spec list */
+
+.specList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.specRow {
+  appearance: none;
+  display: grid;
+  grid-template-columns: 118px minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+  text-align: left;
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 8px;
+  padding: 7px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.14s ease;
+}
+
+.specRow:hover {
+  background: var(--lab-panel);
+}
+
+.specRowOpen {
+  background: var(--lab-panel);
+  border-color: var(--lab-line);
+}
+
+.specName {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: var(--lab-accent);
+}
+
+.specNote {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--lab-text-faint);
+}
+
+.specDetail {
+  grid-column: 2;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  color: #7e8aa0;
+  padding-top: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stateButton,
+  .scenarioButton,
+  .ghostButton,
+  .slider::-webkit-slider-thumb {
+    transition: none;
+  }
+}
+
+/* The avatar itself is the click target (blink / wake). Focus ring is kept
+   subtle and only shown for keyboard users. */
+.clickTarget {
+  display: block;
+  border: 0;
+  padding: 10px;
+  margin: -10px;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.clickTarget:focus-visible {
+  box-shadow: 0 0 0 2px rgba(110, 168, 254, 0.5);
+}

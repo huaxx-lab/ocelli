@@ -1,0 +1,15 @@
+# ============================================================================
+# dsh-avatar-lab — DSH bundle patch
+# ============================================================================
+# Mounts the Avatar Lab client plugin into a DSH profile. The plugin is purely
+# additive: it registers one entry in the `shell.overlay` slot (a floating
+# launcher plus the full-screen Lab) and never replaces an existing occupant,
+# so the surrounding Harness UI is untouched.
+#
+# Install:
+#   dsh plugin --profile web add link:$PWD/dist/plugin
+# ============================================================================
+
+- insert:
+    - id: avatar-lab
+      name: dsh-avatar-lab
